@@ -96,6 +96,13 @@ export function ListingsPage() {
   return (
     <div style={{ padding: '16px' }}>
       <Title level="2" style={{ marginBottom: '20px' }}>
+        <Button 
+  onClick={() => navigate('/create')}
+  size="m"
+  style={{ marginBottom: '20px' }}
+>
+  + Create Listing
+</Button>
         Marketplace
       </Title>
 
