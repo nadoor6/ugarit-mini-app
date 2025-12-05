@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // ADD THIS IMPORT
 import { Card, Text, Title, Image, Button, Spinner } from '@telegram-apps/telegram-ui';
-import { hapticFeedback } from '@tma.js/sdk'; // Correct import
+import { hapticFeedback } from '@tma.js/sdk';
 import { supabase } from '../lib/supabase';
 
 interface Listing {
@@ -20,6 +21,7 @@ export function ListingsPage() {
   const [listings, setListings] = useState<Listing[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate(); // Now properly initialized
 
   const fetchListings = async () => {
     try {
@@ -57,9 +59,7 @@ export function ListingsPage() {
     fetchListings();
   }, []);
 
-  // Simple haptic helper
   const triggerHaptic = (type: 'light' | 'medium' | 'heavy' = 'medium') => {
-    // Check if hapticFeedback is available
     if (hapticFeedback && typeof hapticFeedback.impactOccurred === 'function') {
       hapticFeedback.impactOccurred(type);
     } else {
@@ -113,7 +113,7 @@ export function ListingsPage() {
             }}
             onClick={() => {
               triggerHaptic('light');
-              console.log('View details for:', listing.id);
+              navigate(`/listing/${listing.id}`); // FIXED: Using the correct 'listing' variable
             }}
           >
             <div style={{ display: 'flex', gap: '16px' }}>
