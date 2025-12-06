@@ -44,15 +44,3 @@
     white-space: nowrap;
     width: fit-content;
 }
-
-
-/* Optional: Hover and disabled states */
-
-.button-ios:hover:not(:disabled) {
-    opacity: 0.9;
-}
-
-.button-ios:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
