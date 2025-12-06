@@ -1,20 +1,18 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { LoginAnimation } from './login/LoginAnimation';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { ListingsPage } from './ListingsPage';
 import { ListingDetail } from './ListingDetail';
-import { CreateListingForm } from './CreateListingForm'; // Add this import
-
+import { CreateListingForm } from './CreateListingForm';
+import LoginAnimation from './login/LoginAnimation';
 
 export function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginAnimation />} />
-        <Route path="/" element={<ListingsPage />} />
+        <Route path="/marketplace" element={<ListingsPage />} />
         <Route path="/listing/:listingId" element={<ListingDetail />} />
-        <Route path="/create" element={<CreateListingForm />} /> {/* Add this route */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/create" element={<CreateListingForm />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }

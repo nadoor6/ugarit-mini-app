@@ -1,62 +1,60 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { hapticFeedback } from '@tma.js/sdk';
 
-export const LoginAnimation: React.FC = () => {
-  const [stage, setStage] = useState(1);
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight
-  });
-
-  // Track window size for responsiveness
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight
-      });
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+const LoginAnimation: React.FC = (): JSX.Element => {
+  const [stage, setStage] = useState<number>(1);
 
   // Simple animation: stage 1 → 2 → 3
   useEffect(() => {
     const timer1 = setTimeout(() => setStage(2), 800);
     const timer2 = setTimeout(() => setStage(3), 1600);
+    
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
     };
   }, []);
 
-  const handleClick = () => {
-  if (hapticFeedback) {
-    hapticFeedback.impactOccurred('medium');
-  }
+  const handleButtonClick = () => {
+    if (hapticFeedback) {
+      hapticFeedback.impactOccurred('medium');
+    }
+    console.log('Telegram login button clicked');
+  };
 
-  // Calculate scale to fit screen
-  const scale = useMemo(() => {
-    const designWidth = 440;
-    const designHeight = 956;
+  // Calculate responsive scale
+  const [scale, setScale] = useState<number>(1);
+  
+  useEffect(() => {
+    const calculateScale = () => {
+      const designWidth = 440;
+      const designHeight = 956;
+      
+      const widthScale = window.innerWidth / designWidth;
+      const heightScale = window.innerHeight / designHeight;
+      
+      const newScale = Math.min(widthScale, heightScale, 1.5);
+      setScale(newScale);
+    };
+
+    calculateScale();
+    window.addEventListener('resize', calculateScale);
     
-    const widthScale = windowSize.width / designWidth;
-    const heightScale = windowSize.height / designHeight;
-    
-    // Use the smaller scale to ensure everything fits
-    return Math.min(widthScale, heightScale, 1.5); // Max scale 1.5x
-  }, [windowSize]);
+    return () => window.removeEventListener('resize', calculateScale);
+  }, []);
 
   return (
     <div style={{
-      width: '100%',
+      width: '100vw',
       height: '100vh',
       background: '#000000',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      position: 'fixed',
+      top: 0,
+      left: 0
     }}>
       <div style={{
         width: '440px',
@@ -84,7 +82,7 @@ export const LoginAnimation: React.FC = () => {
           left: stage === 1 ? '-12px' : '17px',
           top: '397px',
           position: 'absolute',
-          overflow: 'hidden',
+          overflow: stage === 1 ? 'hidden' : 'visible',
           transition: 'width 0.8s ease, left 0.8s ease'
         }}>
           <div style={{
@@ -99,7 +97,7 @@ export const LoginAnimation: React.FC = () => {
               color: 'white',
               fontSize: '60px',
               fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
-              fontWeight: '100',
+              fontWeight: 100,
               lineHeight: '60px'
             }}>
               Welcome to<br/>
@@ -108,7 +106,7 @@ export const LoginAnimation: React.FC = () => {
               color: 'white',
               fontSize: '60px',
               fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
-              fontWeight: '900',
+              fontWeight: 900,
               lineHeight: '60px'
             }}>
               ugarit
@@ -130,7 +128,7 @@ export const LoginAnimation: React.FC = () => {
           transition: 'top 0.8s ease'
         }}>
           <button
-            onClick={handleClick}
+            onClick={handleButtonClick}
             style={{
               width: '100%',
               height: '58px',
@@ -149,7 +147,7 @@ export const LoginAnimation: React.FC = () => {
               color: 'white',
               fontSize: '17px',
               fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
-              fontWeight: '600',
+              fontWeight: 600,
               lineHeight: '22px'
             }}>
               Log in with Telegram
@@ -192,4 +190,6 @@ export const LoginAnimation: React.FC = () => {
       </div>
     </div>
   );
-}};
+};
+
+export default LoginAnimation;
