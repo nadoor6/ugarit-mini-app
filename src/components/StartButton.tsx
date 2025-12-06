@@ -11,7 +11,7 @@ export function StartButton({ onClick, disabled, children = 'Start' }: StartButt
   const handleClick = () => {
   // 1. Trigger haptic feedback on every press
   if (hapticFeedback) {
-    hapticFeedback.impactOccurred('medium');
+    hapticFeedback.impactOccurred('heavy');
   }
   
   // 2. Call the passed onClick function, if it exists
